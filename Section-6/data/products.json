@@ -1,0 +1,18 @@
+{
+  "products": [
+    {
+      "id": "1efa",
+      "productName": "Shampo",
+      "productPrice": "8.0 $",
+      "productDescription": "Product photography is a branch of photography, which accurately and attractively represents a product in advertising. Product photography can make a major improvement in many websites as professionals, who understand the procedure, use correct lighting, background materials, camera angles, focus, and depth of field and other technical features as part of the job.",
+      "productImage": "https://upload.wikimedia.org/wikipedia/commons/thumb/6/65/Product_Photography.jpg/776px-Product_Photography.jpg?20181215065205"
+    },
+    {
+      "id": "6fb4",
+      "productName": "Addidas",
+      "productPrice": "65 $",
+      "productDescription": "Free Online Instagram Product Showcase Maker | LightX",
+      "productImage": "https://d2v5dzhdg4zhx3.cloudfront.net/web-assets/images/storypages/primary/ProductShowcasesampleimages/JPEG/Product+Showcase-1.jpg"
+    }
+  ]
+}
