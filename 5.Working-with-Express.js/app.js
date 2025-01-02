@@ -10,6 +10,7 @@ const app = express();
 //   next(); // Allows the request to continue to the next  in line
 // });
 app.use(express.static(path.join(__dirname, "views")));
+app.use(express.static(path.join(__dirname, "public")));
 app.use(bodyParser.urlencoded({ extended: false }));
 // app.use("/admin", adminRoutes); //adding filter route
 app.use(adminRoutes);
