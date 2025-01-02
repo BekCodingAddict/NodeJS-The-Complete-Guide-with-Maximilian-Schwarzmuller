@@ -1,0 +1,41 @@
+doctype html
+html(lang="en")
+    head
+        meta(charset="UTF-8")
+        meta(name="viewport", content="width=device-width, initial-scale=1.0")
+        title #{docTitle}
+        link(rel="stylesheet", href="styles.css")
+    body
+        header.header 
+           nav.navbar
+              div.logo My Shop
+              ul.nav-links 
+                 li 
+                    a(href="/") Home 
+                 li 
+                    a(href="/about") About 
+                 li 
+                    a(href="/products") Product 
+                 li 
+                    a(href="/contact") Contact 
+                 li 
+            
+        section.add-product
+            h2 Add New Product
+            form(action="/add-new-product" method="POST")
+                div.form-group
+                    label(for="product-name") Product Name
+                    input(  type="text" id="product-name" name="productName" placeholder="Enter product name" required)
+                div.form-group
+                    label(for="product-price") Product Price
+                    input(  type="number" id="product-price" name="productPrice" placeholder="Enter product name" required)
+                div.form-group
+                    label(for="product-description") Product Description
+                    textarea( type="text" id="product-description" name="productDescription" placeholder="Enter product name" required)
+                div.form-group
+                    label(for="product-name") Product Image URL
+                    input(  type="text" id="product-name" name="productName" placeholder="Enter product name" required)
+                button(type='submit').cta-button Add Product
+   
+
+ 

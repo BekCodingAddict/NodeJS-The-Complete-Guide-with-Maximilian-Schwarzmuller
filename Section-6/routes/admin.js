@@ -5,10 +5,23 @@ const { error } = require("console");
 
 const router = express.Router();
 
-const products = [];
+const products = [
+  {
+    id: "6fb4",
+    productName: "Addidas",
+    productPrice: "65 $",
+    productDescription: "Free Online Instagram Product Showcase Maker | LightX",
+    productImage:
+      "https://d2v5dzhdg4zhx3.cloudfront.net/web-assets/images/storypages/primary/ProductShowcasesampleimages/JPEG/Product+Showcase-1.jpg",
+  },
+];
 
 router.use("/add-product", (req, res, next) => {
   res.sendFile(path.resolve(rootDir, "views", "addProduct.html"));
+});
+
+router.use("/add-product-pug", (req, res, next) => {
+  res.render("addProduct", { docTitle: "Add Product" });
 });
 router.use("/add-new-product", (req, res, next) => {
   fetch("http://localhost:9000/products", {

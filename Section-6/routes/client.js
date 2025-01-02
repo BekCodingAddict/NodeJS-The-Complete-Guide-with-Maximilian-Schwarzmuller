@@ -26,8 +26,9 @@ router.get("/products", (req, res, next) => {
   res.sendFile(path.resolve(rootDir, "views", "products.html"));
 });
 
-router.get("/pug", (req, res, next) => {
-  res.render("shop");
+router.get("/products-pug", (req, res, next) => {
+  const products = adminData.products;
+  res.render("product", { products, docTitle: "Products" });
 });
 
 router.get("/", (req, res, next) => {
