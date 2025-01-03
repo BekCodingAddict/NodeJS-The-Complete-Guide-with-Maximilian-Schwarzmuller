@@ -45,6 +45,7 @@ router.get("/products-hbs", (req, res, next) => {
     pageTitle: "Our Products - World Wise",
     hasProducts: adminData.products.length > 0,
     products,
+    activePage: true,
   });
 });
 

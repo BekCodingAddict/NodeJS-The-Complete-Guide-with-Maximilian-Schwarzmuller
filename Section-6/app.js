@@ -10,7 +10,14 @@ const app = express();
 // app.set("view engine", "pug");
 // app.set("views", "views");
 
-app.engine("hbs", expressHbs());
+app.engine(
+  "hbs",
+  expressHbs({
+    layoutsDir: "views/handlebars/layouts",
+    defaultLayout: "mainLayout",
+    extends: "hbs",
+  })
+);
 app.set("view engine", "hbs");
 app.set("views", "views");
 
