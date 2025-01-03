@@ -28,7 +28,11 @@ router.get("/products", (req, res, next) => {
 
 router.get("/products-pug", (req, res, next) => {
   const products = adminData.products;
-  res.render("product", { products, docTitle: "Products" });
+  res.render("products", {
+    products,
+    docTitle: "Products",
+    path: "/products-pug",
+  });
 });
 
 router.get("/", (req, res, next) => {

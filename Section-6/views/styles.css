@@ -49,6 +49,11 @@ body {
   color: #fbd38d;
 }
 
+.active {
+  color: orange;
+  font-weight: bold;
+}
+
 .cta-button {
   display: inline-block;
   padding: 0.75rem 1.5rem;

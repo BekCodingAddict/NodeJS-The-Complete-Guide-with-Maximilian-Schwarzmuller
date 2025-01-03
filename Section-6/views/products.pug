@@ -1,0 +1,18 @@
+extends layouts/mainlayout.pug
+
+block styles 
+   link(rel="stylesheet", href="styles.css")
+
+block content
+   section.product-list
+            h2 Our Products
+            div.product-cards
+            if products.length>0
+                each product in products 
+                    div.product-card
+                        img(src=`https://cdn.britannica.com/83/78183-004-345353F4/Stack-books.jpg` alt="https://cdn.britannica.com/83/78183-004-345353F4/Stack-books.jpg")
+                        h3 #{product.productName}
+                        p #{product.productPrice}
+                        a(href="#").cta-button Add to Cart  
+            else 
+                h1 No Products here

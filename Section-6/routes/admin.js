@@ -21,8 +21,12 @@ router.use("/add-product", (req, res, next) => {
 });
 
 router.use("/add-product-pug", (req, res, next) => {
-  res.render("addProduct", { docTitle: "Add Product" });
+  res.render("addProduct", {
+    docTitle: "Add Product",
+    path: "/admin/add-product-pug",
+  });
 });
+
 router.use("/add-new-product", (req, res, next) => {
   fetch("http://localhost:9000/products", {
     method: "POST",
