@@ -1,0 +1,68 @@
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Our Products - World Wise</title>
+    <link rel="stylesheet" href="styles.css" />
+</head>
+
+<body>
+    <header class="header">
+        <nav class="navbar">
+            <div class="logo">World Wise</div>
+            <ul class="nav-links">
+                <li><a href="/">Home</a></li>
+                <li><a href="/about">About</a></li>
+                <li><a href="/products">Products</a></li>
+                <li><a href="/contact">Contact</a></li>
+                <li><a href="/add-product">Add Product</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section style="height: 90dvh" class="product-list">
+        <h2>Our Products</h2>
+        {{#if hasProducts}}
+        <div class="product-cards">
+            {{#each products}}
+            <div class="product-card">
+                <img src="https://d2v5dzhdg4zhx3.cloudfront.net/web-assets/images/storypages/primary/ProductShowcasesampleimages/JPEG/Product+Showcase-1.jpg"
+                    alt="Addidas" />
+                <h3>{{this.productName}}</h3>
+                <p>{{this.productPrice}}</p>
+                <a href="#" class="cta-button">Add to Cart</a>
+            </div>
+        </div>
+        {{/each}}
+        {{else}}
+        <h1>No Products</h1>
+        {{/if}}
+    </section>
+
+    <footer class="footer">
+        <p>&copy; 2024 World Wise. All rights reserved.</p>
+    </footer>
+    <script>
+        const baseUrl = "http://localhost:9000/products"; function fetchProducts() {
+            fetch(baseUrl).then((res) => {
+                if (!res.ok) throw new Error(`HTTP error!
+      status:${res.status}`); return res.json();
+            }).then((data) => {
+                const
+                productList = document.getElementsByClassName("product-cards");
+                productList.innerHTML = ""; console.log(productList);
+                data.forEach((product) => {
+                    const newCard = document.createElement("div");
+                    newCard.classList.add("product-card"); newCard.innerHTML = ` <img
+      src="${product.productImage}" alt="${product.productName}" />
+      <h3>${product.productName}</h3> <p>${product.productPrice}</p> <a href="#"
+      class="cta-button">Add to Cart</a> `; productList[0].appendChild(newCard);
+                });
+            }).catch((error) => console.log("Error fetching product", error));
+        }
+        fetchProducts();
+    </script>
+</body>
+
+</html>

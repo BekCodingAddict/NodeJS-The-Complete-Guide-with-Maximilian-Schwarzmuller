@@ -3,10 +3,15 @@ const path = require("path");
 const bodyParser = require("body-parser");
 const adminRoutes = require("./routes/admin");
 const clientRoute = require("./routes/client");
+const expressHbs = require("express-handlebars");
 
 const app = express();
 
-app.set("view engine", "pug");
+// app.set("view engine", "pug");
+// app.set("views", "views");
+
+app.engine("hbs", expressHbs());
+app.set("view engine", "hbs");
 app.set("views", "views");
 
 app.use(express.static(path.join(__dirname, "views")));

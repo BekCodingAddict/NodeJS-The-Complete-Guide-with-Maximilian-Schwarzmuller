@@ -1,7 +1,6 @@
 const express = require("express");
 const path = require("path");
 const rootDir = require("../utils/path");
-const { error } = require("console");
 
 const router = express.Router();
 
@@ -24,6 +23,13 @@ router.use("/add-product-pug", (req, res, next) => {
   res.render("addProduct", {
     docTitle: "Add Product",
     path: "/admin/add-product-pug",
+  });
+});
+
+router.use("/add-product-hbs", (req, res, next) => {
+  res.render("./handlebars/addProduct", {
+    pageTitle: "Add Product",
+    path: "add-product-hbs",
   });
 });
 

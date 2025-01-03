@@ -35,6 +35,19 @@ router.get("/products-pug", (req, res, next) => {
   });
 });
 
+router.get("/404-handlebars", (req, res, next) => {
+  res.render("./handlebars/404", { pageTitle: "Page not fount" });
+});
+
+router.get("/products-hbs", (req, res, next) => {
+  const products = adminData.products;
+  res.render("./handlebars/products", {
+    pageTitle: "Our Products - World Wise",
+    hasProducts: adminData.products.length > 0,
+    products,
+  });
+});
+
 router.get("/", (req, res, next) => {
   console.log(adminData.products);
   //   res.send("<h1 style='color:red;'>Hello from Express</h1>");
