@@ -34,6 +34,17 @@ router.get("/products-pug", (req, res, next) => {
     path: "/products-pug",
   });
 });
+router.get("/products-ejs", (req, res, next) => {
+  const products = adminData.products;
+  res.render("./EJS/products", {
+    products,
+    pageTitle: "Products",
+  });
+});
+
+router.get("/404-ejs", (req, res, next) => {
+  res.render("./EJS/404", { pageTitle: "Page not fount from EJS" });
+});
 
 router.get("/404-handlebars", (req, res, next) => {
   res.render("./handlebars/404", { pageTitle: "Page not fount" });
