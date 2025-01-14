@@ -5,7 +5,7 @@ const errorPage = require("./controllers/error");
 const dotenv = require("dotenv").config();
 
 // const User = require("./models/user");
-// const adminData = require("./routes/admin");
+const adminData = require("./routes/admin");
 // const shopRoutes = require("./routes/shop");
 const { mongoConnect } = require("./util/database");
 
@@ -22,16 +22,17 @@ app.use((req, res, next) => {
   //     next();
   //   })
   //   .catch((err) => console.log(err));
+  next();
 });
 
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
-// app.use("/admin", adminData.routes);
+app.use("/admin", adminData.routes);
 // app.use(shopRoutes);
 
 app.use(errorPage);
 
 mongoConnect(() => {
-  app.listen(() => console.log("Server runnig on port :" + 3000), 3000);
+  app.listen(3000);
 });
