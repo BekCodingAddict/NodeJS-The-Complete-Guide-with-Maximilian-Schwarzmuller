@@ -6,7 +6,7 @@ const dotenv = require("dotenv").config();
 
 // const User = require("./models/user");
 const adminData = require("./routes/admin");
-// const shopRoutes = require("./routes/shop");
+const shopRoutes = require("./routes/shop");
 const { mongoConnect } = require("./util/database");
 
 const app = express();
@@ -29,7 +29,7 @@ app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 
 app.use("/admin", adminData.routes);
-// app.use(shopRoutes);
+app.use(shopRoutes);
 
 app.use(errorPage);
 

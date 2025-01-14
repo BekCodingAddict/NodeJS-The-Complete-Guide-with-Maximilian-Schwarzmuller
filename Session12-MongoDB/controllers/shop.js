@@ -2,7 +2,7 @@ const Product = require("../models/product");
 const { where } = require("sequelize");
 
 const getIndex = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render("shop/index", {
         prods: products,
@@ -14,7 +14,7 @@ const getIndex = (req, res, next) => {
 };
 
 const getProducts = (req, res, next) => {
-  Product.findAll()
+  Product.fetchAll()
     .then((products) => {
       res.render("shop/product-list", {
         prods: products,
