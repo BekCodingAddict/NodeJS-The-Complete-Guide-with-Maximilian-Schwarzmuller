@@ -27,11 +27,11 @@ const getProducts = (req, res, next) => {
 
 const getProduct = (req, res, next) => {
   const productId = req.params.productId;
-  Product.findAll({ where: { id: productId } })
+  Product.findById(productId)
     .then((products) => {
       res.render("shop/product-detail", {
-        product: products[0],
-        pageTitle: products[0].title,
+        product: products,
+        pageTitle: products.title,
         path: "/products",
       });
     })
