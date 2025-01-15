@@ -21,6 +21,6 @@ router.get("/products", getProducts);
 router.post("/add-product", postAddProduct);
 
 router.get("/edit-product/:productId", getEditProduct);
-// router.post("/edit-product", postEditProduct);
+router.post("/edit-product", postEditProduct);
 // router.post("/delete-product", deleteProduct);
 exports.routes = router;
