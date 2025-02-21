@@ -5,8 +5,18 @@ const mongoose = require("mongoose");
 const session = require("express-session");
 const errorController = require("./controllers/error");
 const User = require("./models/user");
+const MongoDBStore = require("connect-mongodb-session")(session);
 
 const app = express();
+const store = new MongoDBStore({
+  uri: "mongodb+srv://bekcodingaddict:Otabek97@expressbus.lorhvlo.mongodb.net/Test",
+  collection: "sessions", // Rename it to "sessions" (standard convention)
+  expires: 1000 * 60 * 60 * 24, // 1 day in milliseconds
+});
+
+store.on("error", function (error) {
+  console.log(error);
+});
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -18,7 +28,12 @@ const authRoutes = require("./routes/auth");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
-  session({ secret: "my secret", resave: false, saveUninitialized: false })
+  session({
+    secret: "my secret",
+    resave: false,
+    saveUninitialized: false,
+    store: store,
+  })
 );
 
 app.use(async (req, res, next) => {
