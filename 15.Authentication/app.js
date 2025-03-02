@@ -61,15 +61,6 @@ mongoose
     }
   )
   .then(async () => {
-    let user = await User.findOne();
-    if (!user) {
-      user = new User({
-        name: "John",
-        email: "John@text.com",
-        cart: { items: [] },
-      });
-      await user.save();
-    }
     console.log("Connected to MongoDB ✅");
     app.listen(3000, () => console.log("Server is running on port 3000 🚀"));
   })
