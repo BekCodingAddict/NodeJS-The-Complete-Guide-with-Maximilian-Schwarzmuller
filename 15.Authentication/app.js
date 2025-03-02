@@ -7,6 +7,7 @@ const errorController = require("./controllers/error");
 const User = require("./models/user");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
+const flash = require("connect-flash");
 
 const app = express();
 const store = new MongoDBStore({
@@ -40,6 +41,7 @@ app.use(
 );
 
 app.use(csrfProtection);
+app.use(flash());
 app.use(async (req, res, next) => {
   if (!req.session.user) {
     return next();
