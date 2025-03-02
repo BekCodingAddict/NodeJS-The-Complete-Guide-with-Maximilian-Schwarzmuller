@@ -6,6 +6,7 @@ const session = require("express-session");
 const errorController = require("./controllers/error");
 const User = require("./models/user");
 const MongoDBStore = require("connect-mongodb-session")(session);
+const csrf = require("csurf");
 
 const app = express();
 const store = new MongoDBStore({
@@ -13,6 +14,8 @@ const store = new MongoDBStore({
   collection: "sessions", // Rename it to "sessions" (standard convention)
   expires: 1000 * 60 * 60 * 24, // 1 day in milliseconds
 });
+
+const csrfProtection = csrf();
 
 store.on("error", function (error) {
   console.log(error);
@@ -35,6 +38,8 @@ app.use(
     store: store,
   })
 );
+
+app.use(csrfProtection);
 app.use(async (req, res, next) => {
   if (!req.session.user) {
     return next();
