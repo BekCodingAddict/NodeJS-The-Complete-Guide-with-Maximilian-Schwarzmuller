@@ -1,5 +1,8 @@
 const User = require("../models/user");
 const bcrypt = require("bcryptjs");
+const crypto = require("crypto");
+const nodemailer = require("nodemailer");
+require("dotenv").config();
 
 exports.getLogin = (req, res, next) => {
   let message = req.flash("error");
@@ -96,5 +99,55 @@ exports.getReset = (req, res, next) => {
     path: "/reset",
     pageTitle: "Reset",
     errorMessage: message,
+  });
+};
+
+exports.postReset = (req, res, next) => {
+  const transporter = nodemailer.createTransport({
+    service: "gmail",
+    auth: {
+      user: req.body.email,
+      pass: process.env.EMAIL_PASSWORD,
+    },
+  });
+
+  crypto.randomBytes(32, (err, buffer) => {
+    if (err) {
+      console.log(err);
+      return res.redirect("/reset");
+    }
+    const token = buffer.toString("hex");
+    User.findOne({ email: req.body.email })
+      .then((user) => {
+        if (!user) {
+          req.flash("error", "No accaunt with that email found!");
+          return res.redirect("/reset");
+        }
+        user.resetToken = token;
+        user.resetTokenExpiration = Date.now() + 3600000;
+        return user.save();
+      })
+      .then((result) => {
+        res.redirect("/");
+        transporter.sendMail(
+          {
+            from: "shop@node-complate.com",
+            to: req.body.email,
+            subject: "Password Reset",
+            html: `
+        <p>Your requested a password reset</p>
+        <p>Click this <a href="http://localhost:3000/reset/${token}">Link</a> to set a new password</p>
+        `,
+          },
+          function (error, info) {
+            if (error) {
+              console.log(error);
+            } else {
+              console.log("Email Send : " + info.response);
+            }
+          }
+        );
+      })
+      .catch((err) => console.log(err));
   });
 };
