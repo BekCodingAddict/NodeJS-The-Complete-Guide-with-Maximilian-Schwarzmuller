@@ -2,14 +2,31 @@ const path = require("path");
 const express = require("express");
 const router = require("./admin");
 const authController = require("../controllers/auth");
-const { check } = require("express-validator");
+const { check, body } = require("express-validator");
+const { emailValidation } = require("../validation/signUpValidations");
 
 router.get("/login", authController.getLogin);
 router.post("/login", authController.postLogin);
 router.post("/logout", authController.postLogout);
 router.post(
   "/signup",
-  check("email").isEmail().withMessage("Please enter a valid email!"),
+  [
+    check("email")
+      .isEmail()
+      .withMessage("Please enter a valid email!")
+      .custom((value, { req }) => {
+        if (value === "test@test.com") {
+          throw new Error("This email address if forbitten");
+        }
+        return true;
+      }),
+    body(
+      "password",
+      '"Please enter a password with only numbers and text and at least 5 characters"'
+    )
+      .isLength({ min: 5 })
+      .isAlphanumeric(),
+  ],
   authController.postSignUp
 );
 router.get("/signup", authController.getSignUp);
