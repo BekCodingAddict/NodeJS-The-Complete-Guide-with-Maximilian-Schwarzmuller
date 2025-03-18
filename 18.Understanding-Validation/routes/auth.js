@@ -7,7 +7,11 @@ const { check } = require("express-validator");
 router.get("/login", authController.getLogin);
 router.post("/login", authController.postLogin);
 router.post("/logout", authController.postLogout);
-router.post("/signup", check("email").isEmail(), authController.postSignUp);
+router.post(
+  "/signup",
+  check("email").isEmail().withMessage("Please enter a valid email!"),
+  authController.postSignUp
+);
 router.get("/signup", authController.getSignUp);
 router.get("/reset", authController.getReset);
 router.post("/reset", authController.postReset);
