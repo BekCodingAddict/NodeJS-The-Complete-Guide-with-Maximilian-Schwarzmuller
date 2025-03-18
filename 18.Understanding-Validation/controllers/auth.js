@@ -4,17 +4,7 @@ const crypto = require("crypto");
 const nodemailer = require("nodemailer");
 require("dotenv").config();
 const { validationResult } = require("express-validator");
-
-exports.getLogin = (req, res, next) => {
-  let message = req.flash("error");
-  if (message.length > 0) message = message[0];
-  else message = null;
-  res.render("auth/login", {
-    path: "/login",
-    pageTitle: "Login",
-    errorMessage: message,
-  });
-};
+const { error } = require("console");
 
 exports.getSignUp = (req, res, next) => {
   let message = req.flash("error");
@@ -24,6 +14,12 @@ exports.getSignUp = (req, res, next) => {
     path: "/signup",
     pageTitle: "Signup",
     errorMessage: message,
+    oldInput: {
+      email: "",
+      password: "",
+      confirmPassword: "",
+    },
+    validationErrors: [],
   });
 };
 
@@ -38,6 +34,12 @@ exports.postSignUp = (req, res, next) => {
       path: "/signup",
       pageTitle: "Signup",
       errorMessage: errors.array().at(0).msg,
+      oldInput: {
+        email,
+        password,
+        confirmPassword: req.body.confirmPassword,
+      },
+      validationErrors: errors.array(),
     });
   }
 
@@ -59,9 +61,29 @@ exports.postSignUp = (req, res, next) => {
     .catch((error) => console.log(error));
 };
 
+exports.getLogin = (req, res, next) => {
+  let message = req.flash("error");
+  if (message.length > 0) message = message[0];
+  else message = null;
+  res.render("auth/login", {
+    path: "/login",
+    pageTitle: "Login",
+    errorMessage: message,
+  });
+};
+
 exports.postLogin = async (req, res, next) => {
   const email = req.body.email;
   const password = req.body.password;
+
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(422).render("auth/login", {
+      path: "/login",
+      pageTitle: "Login",
+      errorMessage: errors.array()[0].msg,
+    });
+  }
 
   await User.findOne({ email: email })
     .then((user) => {
