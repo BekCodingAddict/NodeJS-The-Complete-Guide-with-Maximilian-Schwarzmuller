@@ -69,6 +69,7 @@ app.use(shopRoutes);
 app.use(authRoutes);
 
 app.use(errorController.get404);
+app.use("/500", errorController.get500);
 
 mongoose
 	.connect("mongodb+srv://bekcodingaddict:Otabek97@expressbus.lorhvlo.mongodb.net/Test", {
