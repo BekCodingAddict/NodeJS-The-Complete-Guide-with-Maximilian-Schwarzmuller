@@ -11,15 +11,15 @@ const flash = require("connect-flash");
 
 const app = express();
 const store = new MongoDBStore({
-  uri: "mongodb+srv://bekcodingaddict:Otabek97@expressbus.lorhvlo.mongodb.net/Test",
-  collection: "sessions", // Rename it to "sessions" (standard convention)
-  expires: 1000 * 60 * 60 * 24, // 1 day in milliseconds
+	uri: "mongodb+srv://bekcodingaddict:Otabek97@expressbus.lorhvlo.mongodb.net/Test",
+	collection: "sessions", // Rename it to "sessions" (standard convention)
+	expires: 1000 * 60 * 60 * 24, // 1 day in milliseconds
 });
 
 const csrfProtection = csrf();
 
 store.on("error", function (error) {
-  console.log(error);
+	console.log(error);
 });
 
 app.set("view engine", "ejs");
@@ -32,32 +32,36 @@ const authRoutes = require("./routes/auth");
 app.use(bodyParser.urlencoded({ extended: false }));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(
-  session({
-    secret: "my secret",
-    resave: false,
-    saveUninitialized: false,
-    store: store,
-  })
+	session({
+		secret: "my secret",
+		resave: false,
+		saveUninitialized: false,
+		store: store,
+	})
 );
 
 app.use(csrfProtection);
 app.use(flash());
 app.use(async (req, res, next) => {
-  if (!req.session.user) {
-    return next();
-  }
-  await User.findById(req.session.user._id)
-    .then((user) => {
-      req.user = user;
-      next();
-    })
-    .catch((error) => console.log(error));
+	if (!req.session.user) {
+		return next();
+	}
+	await User.findById(req.session.user._id)
+		.then((user) => {
+			if (!user) {
+				return next();
+			}
+			req.user = user;
+			next();
+		})
+		.catch((error) => {
+			console.log(error);
+			throw new Error(err);
+		});
 });
 
 app.use((req, res, next) => {
-  (res.locals.isAuthenticated = req.session.isLoggedIn),
-    (res.locals.csrfToken = req.csrfToken()),
-    next();
+	(res.locals.isAuthenticated = req.session.isLoggedIn), (res.locals.csrfToken = req.csrfToken()), next();
 });
 
 app.use("/admin", adminRoutes);
@@ -67,15 +71,12 @@ app.use(authRoutes);
 app.use(errorController.get404);
 
 mongoose
-  .connect(
-    "mongodb+srv://bekcodingaddict:Otabek97@expressbus.lorhvlo.mongodb.net/Test",
-    {
-      useNewUrlParser: true,
-      useUnifiedTopology: true,
-    }
-  )
-  .then(async () => {
-    console.log("Connected to MongoDB ✅");
-    app.listen(3000, () => console.log("Server is running on port 3000 🚀"));
-  })
-  .catch((err) => console.log("MongoDB connection error:", err));
+	.connect("mongodb+srv://bekcodingaddict:Otabek97@expressbus.lorhvlo.mongodb.net/Test", {
+		useNewUrlParser: true,
+		useUnifiedTopology: true,
+	})
+	.then(async () => {
+		console.log("Connected to MongoDB ✅");
+		app.listen(3000, () => console.log("Server is running on port 3000 🚀"));
+	})
+	.catch((err) => console.log("MongoDB connection error:", err));
