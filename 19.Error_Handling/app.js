@@ -1,26 +1,23 @@
 const path = require("path");
+
 const express = require("express");
 const bodyParser = require("body-parser");
 const mongoose = require("mongoose");
 const session = require("express-session");
-const errorController = require("./controllers/error");
-const User = require("./models/user");
 const MongoDBStore = require("connect-mongodb-session")(session);
 const csrf = require("csurf");
 const flash = require("connect-flash");
+require("dotenv").config();
+
+const errorController = require("./controllers/error");
+const User = require("./models/user");
 
 const app = express();
 const store = new MongoDBStore({
-	uri: "mongodb+srv://bekcodingaddict:Otabek97@expressbus.lorhvlo.mongodb.net/Test",
-	collection: "sessions", // Rename it to "sessions" (standard convention)
-	expires: 1000 * 60 * 60 * 24, // 1 day in milliseconds
+	uri: process.env.MONGODB_URI,
+	collection: "sessions",
 });
-
 const csrfProtection = csrf();
-
-store.on("error", function (error) {
-	console.log(error);
-});
 
 app.set("view engine", "ejs");
 app.set("views", "views");
@@ -39,14 +36,14 @@ app.use(
 		store: store,
 	})
 );
-
 app.use(csrfProtection);
 app.use(flash());
-app.use(async (req, res, next) => {
+
+app.use((req, res, next) => {
 	if (!req.session.user) {
 		return next();
 	}
-	await User.findById(req.session.user._id)
+	User.findById(req.session.user._id)
 		.then((user) => {
 			if (!user) {
 				return next();
@@ -54,25 +51,30 @@ app.use(async (req, res, next) => {
 			req.user = user;
 			next();
 		})
-		.catch((error) => {
-			console.log(error);
-			throw new Error(err);
+		.catch((err) => {
+			next(new Error(err));
 		});
 });
 
 app.use((req, res, next) => {
-	(res.locals.isAuthenticated = req.session.isLoggedIn), (res.locals.csrfToken = req.csrfToken()), next();
+	res.locals.isAuthenticated = req.session.isLoggedIn;
+	res.locals.csrfToken = req.csrfToken();
+	next();
 });
 
 app.use("/admin", adminRoutes);
 app.use(shopRoutes);
 app.use(authRoutes);
 
+app.get("/500", errorController.get500);
+
 app.use(errorController.get404);
-app.use("/500", errorController.get500);
+app.use((error, req, res, next) => {
+	res.riderect("/500 ");
+});
 
 mongoose
-	.connect("mongodb+srv://bekcodingaddict:Otabek97@expressbus.lorhvlo.mongodb.net/Test", {
+	.connect(process.env.MONGODB_URL, {
 		useNewUrlParser: true,
 		useUnifiedTopology: true,
 	})

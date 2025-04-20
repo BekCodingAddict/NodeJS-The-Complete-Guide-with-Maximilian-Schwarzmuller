@@ -1,28 +1,26 @@
-const path = require("path");
+const path = require('path');
 
-const express = require("express");
-const authMiddleware = require("../middleware/authMiddleware");
-const shopController = require("../controllers/shop");
+const express = require('express');
+
+const shopController = require('../controllers/shop');
+const isAuth = require('../middleware/is-auth');
 
 const router = express.Router();
 
-router.get("/", shopController.getIndex);
+router.get('/', shopController.getIndex);
 
-router.get("/products", shopController.getProducts);
+router.get('/products', shopController.getProducts);
 
-router.get("/products/:productId", shopController.getProduct);
+router.get('/products/:productId', shopController.getProduct);
 
-router.get("/cart", authMiddleware, shopController.getCart);
-router.post("/cart", authMiddleware, shopController.postCart);
+router.get('/cart', isAuth, shopController.getCart);
 
-router.post(
-  "/cart-delete-item",
-  authMiddleware,
-  shopController.postCartDeleteProduct
-);
+router.post('/cart', isAuth, shopController.postCart);
 
-router.post("/create-order", authMiddleware, shopController.postOrder);
+router.post('/cart-delete-item', isAuth, shopController.postCartDeleteProduct);
 
-router.get("/orders", authMiddleware, shopController.getOrders);
+router.post('/create-order', isAuth, shopController.postOrder);
+
+router.get('/orders', isAuth, shopController.getOrders);
 
 module.exports = router;
